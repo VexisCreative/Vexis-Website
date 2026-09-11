@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+} from 'lucide-react';
+
 import { SectionLabel } from '@/components/SectionLabel';
 import { Reveal } from '@/components/Reveal';
 
@@ -12,15 +17,17 @@ interface Project {
   images?: string[];
 }
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 const PROJECTS: Project[] = [
   {
     client: 'Northwind Coffee',
     title: 'Full Brand Identity System',
     category: 'Brand Identity',
-    variant: 'large',
-    accent: 'from-emerald-500/20 to-transparent',
+    variant: 'medium',
+    accent: 'green',
     images: [
-      '/portfolio/northwind-coffee.jpg',
+      `${BASE_URL}portfolio/northwind-coffee.jpg`,
     ],
   },
   {
@@ -28,9 +35,9 @@ const PROJECTS: Project[] = [
     title: 'Logo Design & Refresh',
     category: 'Logo Design',
     variant: 'medium',
-    accent: 'from-teal-500/20 to-transparent',
+    accent: 'green',
     images: [
-      '/portfolio/cliffs-ground-maintenance.jpg',
+      `${BASE_URL}portfolio/cliffs-ground-maintenance.jpg`,
     ],
   },
   {
@@ -38,207 +45,166 @@ const PROJECTS: Project[] = [
     title: 'Social Media Campaign Refresh',
     category: 'Social Media',
     variant: 'medium',
-    accent: 'from-green-500/20 to-transparent',
+    accent: 'green',
     images: [
-      '/portfolio/life-sport-fitness-1.jpg',
-      '/portfolio/life-sport-fitness-2.jpg',
+      `${BASE_URL}images/projects/life-sport-fitness-1.jpg`,
+      `${BASE_URL}images/projects/life-sport-fitness-2.jpg`,
     ],
   },
   {
     client: 'Veridian Goods',
     title: 'E-Commerce Website Design',
-    category: 'Website Design',
-    variant: 'small',
-    accent: 'from-emerald-400/15 to-transparent',
+    category: 'Web Design',
+    variant: 'medium',
+    accent: 'green',
     images: [
-      '/portfolio/veridian-goods-1.jpg',
-      '/portfolio/veridian-goods-2.jpg',
-      '/portfolio/veridian-goods-3.jpg',
-      '/portfolio/veridian-goods-4.jpg',
-      '/portfolio/veridian-goods-5.jpg',
+      `${BASE_URL}portfolio/veridian-goods.jpg`,
     ],
   },
   {
     client: 'Charlotte Emma Hair',
-    title: 'Social Media Campaign Refresh',
-    category: 'Social Media',
-    variant: 'small',
-    accent: 'from-teal-400/15 to-transparent',
+    title: 'Brand & Social Media Refresh',
+    category: 'Branding',
+    variant: 'medium',
+    accent: 'green',
     images: [
-    '/portfolio/charlotte-emma-hair-1.jpg',
-    '/portfolio/charlotte-emma-hair-2.jpg',
+      `${BASE_URL}images/projects/charlotte-emma-hair-1.jpg`,
+      `${BASE_URL}images/projects/charlotte-emma-hair-2.jpg`,
     ],
   },
 ];
 
 function ProjectCard({
   project,
-  className,
 }: {
   project: Project;
-  className?: string;
 }) {
+  const images = project.images ?? [];
+  const hasMultipleImages = images.length > 1;
+
   const [currentImage, setCurrentImage] = useState(0);
   const [paused, setPaused] = useState(false);
-
-  const images = project.images ?? [];
-  const hasImages = images.length > 0;
-  const hasMultipleImages = images.length > 1;
 
   useEffect(() => {
     if (!hasMultipleImages || paused) return;
 
     const interval = window.setInterval(() => {
-      setCurrentImage((current) => (current + 1) % images.length);
+      setCurrentImage((previous) =>
+        previous === images.length - 1 ? 0 : previous + 1
+      );
     }, 4000);
 
-    return () => window.clearInterval(interval);
+    return () => {
+      window.clearInterval(interval);
+    };
   }, [hasMultipleImages, images.length, paused]);
 
   const previousImage = () => {
-    setCurrentImage((current) =>
-      current === 0 ? images.length - 1 : current - 1
+    setCurrentImage((previous) =>
+      previous === 0 ? images.length - 1 : previous - 1
     );
   };
 
   const nextImage = () => {
-    setCurrentImage((current) => (current + 1) % images.length);
+    setCurrentImage((previous) =>
+      previous === images.length - 1 ? 0 : previous + 1
+    );
   };
 
   return (
     <article
-      className={`card-hover group relative cursor-pointer overflow-hidden rounded-2xl border border-vexis-border bg-vexis-card ${
-        className ?? ''
-      }`}
+      className="group relative overflow-hidden rounded-2xl border border-vexis-border bg-vexis-card transition-all duration-300 hover:-translate-y-1 hover:border-vexis-green/40 hover:shadow-[0_15px_50px_rgba(0,210,106,0.08)]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Project visual */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-vexis-black-secondary">
-        {hasImages ? (
-          <>
-            <img
-              src={images[currentImage]}
-              alt={`${project.client} - ${project.title} - image ${
-                currentImage + 1
-              }`}
-              className="h-full w-full object-contain bg-black transition-opacity duration-500"
-            />
-
-            <div
-              className={`absolute inset-0 bg-gradient-to-br ${project.accent} opacity-10`}
-            />
-
-            {hasMultipleImages && (
-              <>
-                {/* Previous */}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    previousImage();
-                  }}
-                  className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/60 text-white opacity-0 backdrop-blur-sm transition-all duration-300 hover:border-vexis-green hover:text-vexis-green group-hover:opacity-100"
-                  aria-label={`Previous image for ${project.client}`}
-                >
-                  <ArrowLeft size={17} />
-                </button>
-
-                {/* Next */}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    nextImage();
-                  }}
-                  className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/60 text-white opacity-0 backdrop-blur-sm transition-all duration-300 hover:border-vexis-green hover:text-vexis-green group-hover:opacity-100"
-                  aria-label={`Next image for ${project.client}`}
-                >
-                  <ArrowRight size={17} />
-                </button>
-
-                {/* Slide dots */}
-                <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentImage(index);
-                      }}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        index === currentImage
-                          ? 'w-6 bg-vexis-green'
-                          : 'w-1.5 bg-white/40 hover:bg-white/70'
-                      }`}
-                      aria-label={`Show image ${index + 1} for ${project.client}`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </>
+      {/* Image area */}
+      <div className="relative aspect-[16/10] overflow-hidden bg-black">
+        {images.length > 0 ? (
+          <img
+            src={images[currentImage]}
+            alt={`${project.client} - ${project.title} - image ${
+              currentImage + 1
+            }`}
+            className="h-full w-full object-contain bg-black transition-transform duration-500 group-hover:scale-[1.02]"
+          />
         ) : (
+          <div className="flex h-full items-center justify-center text-sm text-vexis-text-secondary">
+            Project image coming soon
+          </div>
+        )}
+
+        {/* Subtle overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+        {/* Project arrow */}
+        <div className="absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full border border-vexis-green/40 bg-vexis-black/80 backdrop-blur-sm transition-all duration-300 group-hover:border-vexis-green group-hover:bg-vexis-green">
+          <ArrowUpRight
+            size={18}
+            className="text-vexis-green transition-colors duration-300 group-hover:text-black"
+          />
+        </div>
+
+        {/* Slider controls */}
+        {hasMultipleImages && (
           <>
-            {/* Placeholder */}
-            <div className="absolute inset-0 vexis-grid-fine" />
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                previousImage();
+              }}
+              className="absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white opacity-0 backdrop-blur-sm transition-all duration-300 hover:border-vexis-green hover:text-vexis-green group-hover:opacity-100"
+              aria-label={`Previous image for ${project.client}`}
+            >
+              <ArrowLeft size={18} />
+            </button>
 
-            <div
-              className={`absolute inset-0 bg-gradient-to-br ${project.accent}`}
-            />
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                nextImage();
+              }}
+              className="absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white opacity-0 backdrop-blur-sm transition-all duration-300 hover:border-vexis-green hover:text-vexis-green group-hover:opacity-100"
+              aria-label={`Next image for ${project.client}`}
+            >
+              <ArrowRight size={18} />
+            </button>
 
-            <div className="absolute bottom-0 left-0 right-0 h-24 green-glow opacity-30" />
-
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg
-                width="120"
-                height="120"
-                viewBox="0 0 120 120"
-                fill="none"
-                className="opacity-30 transition-all duration-500 group-hover:scale-110 group-hover:opacity-50"
-              >
-                <path
-                  d="M30 30 L60 60 L30 90"
-                  stroke="#00D26A"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+            {/* Dots */}
+            <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-3 py-2 backdrop-blur-sm">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setCurrentImage(index);
+                  }}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    currentImage === index
+                      ? 'w-5 bg-vexis-green'
+                      : 'w-1.5 bg-white/40 hover:bg-white/70'
+                  }`}
+                  aria-label={`View image ${index + 1} of ${project.client}`}
                 />
-
-                <path
-                  d="M60 30 L90 60 L60 90"
-                  stroke="#00D26A"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.5"
-                />
-              </svg>
+              ))}
             </div>
           </>
         )}
-
-        {/* Hover overlay */}
-        <div className="pointer-events-none absolute inset-0 bg-vexis-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-        {/* Hover arrow */}
-        <div className="pointer-events-none absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full border border-vexis-green/50 bg-vexis-black/80 opacity-0 transition-all duration-300 group-hover:opacity-100">
-          <ArrowUpRight size={18} className="text-vexis-green" />
-        </div>
       </div>
 
-      {/* Card content */}
-      <div className="p-5">
+      {/* Project information */}
+      <div className="p-5 md:p-6">
         <span className="text-xs font-semibold uppercase tracking-[0.15em] text-vexis-green">
           {project.category}
         </span>
 
-        <h3 className="mt-2 text-lg font-bold text-white">
+        <h3 className="mt-3 text-xl font-bold text-white">
           {project.title}
         </h3>
 
-        <p className="mt-1 text-sm text-vexis-text-secondary">
+        <p className="mt-2 text-sm text-vexis-text-secondary">
           {project.client}
         </p>
       </div>
@@ -252,44 +218,47 @@ export function Portfolio() {
       id="work"
       className="relative overflow-hidden bg-vexis-black-secondary py-24 lg:py-32"
     >
+      {/* Background effects */}
       <div className="absolute inset-0 vexis-grid opacity-30" />
 
-      <div className="absolute left-0 top-1/3 h-[300px] w-[400px] green-glow opacity-25" />
+      <div className="absolute left-0 top-1/3 h-[350px] w-[350px] green-glow opacity-20" />
+
+      <div className="absolute bottom-0 right-0 h-[400px] w-[400px] green-glow opacity-20" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 lg:px-8">
+        {/* Section header */}
         <Reveal>
-          <SectionLabel>04 / Selected Work</SectionLabel>
-
-          <h2 className="text-h2 text-white">
-            Work That
-            <br />
-
-            <span className="text-vexis-text-secondary">
-              Speaks for Itself.
-            </span>
-          </h2>
+          <SectionLabel>04 / Our Work</SectionLabel>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
-          <Reveal>
-            <ProjectCard project={PROJECTS[0]} />
-          </Reveal>
+        <Reveal delay={100}>
+          <div className="mt-6 max-w-3xl">
+            <h2 className="text-h2 text-white">
+              Selected Work.
+              <br />
+              <span className="text-vexis-text-secondary">
+                Built to make businesses stand out.
+              </span>
+            </h2>
 
-          <Reveal delay={100}>
-            <ProjectCard project={PROJECTS[1]} />
-          </Reveal>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-vexis-text-secondary md:text-lg">
+              A selection of branding, content and digital design projects
+              created to help businesses look more professional, communicate
+              more clearly and build a stronger presence.
+            </p>
+          </div>
+        </Reveal>
 
-          <Reveal delay={150}>
-            <ProjectCard project={PROJECTS[2]} />
-          </Reveal>
-
-          <Reveal delay={200}>
-            <ProjectCard project={PROJECTS[3]} />
-          </Reveal>
-
-          <Reveal delay={250}>
-            <ProjectCard project={PROJECTS[4]} />
-          </Reveal>
+        {/* Project grid */}
+        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {PROJECTS.map((project, index) => (
+            <Reveal
+              key={`${project.client}-${project.title}`}
+              delay={100 + index * 80}
+            >
+              <ProjectCard project={project} />
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

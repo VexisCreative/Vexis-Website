@@ -10,9 +10,21 @@ const NAV_LINKS = [
 ];
 
 const SOCIALS = [
-  { icon: Facebook, label: 'Facebook', href: '#' },
-  { icon: Instagram, label: 'Instagram', href: '#' },
-  { icon: Linkedin, label: 'LinkedIn', href: '#' },
+  {
+    icon: Facebook,
+    label: 'Facebook',
+    href: 'https://www.facebook.com/profile.php?id=61590384431701',
+  },
+  {
+    icon: Instagram,
+    label: 'Instagram',
+    href: '#',
+  },
+  {
+    icon: Linkedin,
+    label: 'LinkedIn',
+    href: '#',
+  },
 ];
 
 export function Footer() {
@@ -22,6 +34,7 @@ export function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-vexis-border bg-vexis-black">
+      {/* Background effects */}
       <div className="absolute inset-0 vexis-grid opacity-20" />
 
       <div className="absolute bottom-0 left-1/2 h-[200px] w-[600px] -translate-x-1/2 green-glow opacity-20" />
@@ -48,8 +61,8 @@ export function Footer() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={(event) => {
+                      event.preventDefault();
                       handleNavClick(link.href);
                     }}
                     className="text-sm text-vexis-text-secondary transition-colors hover:text-vexis-green"
@@ -70,12 +83,15 @@ export function Footer() {
             <div className="flex gap-3">
               {SOCIALS.map((social) => {
                 const Icon = social.icon;
+                const isExternal = social.href.startsWith('http');
 
                 return (
                   <a
                     key={social.label}
                     href={social.href}
                     aria-label={social.label}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
                     className="card-hover inline-flex h-11 w-11 items-center justify-center rounded-lg border border-vexis-border bg-vexis-card"
                   >
                     <Icon
@@ -92,22 +108,15 @@ export function Footer() {
         {/* Bottom row */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-vexis-border pt-8 sm:flex-row">
           <p className="text-sm text-vexis-text-secondary">
-            &copy; 2026 VEXIS Creative
+            &copy; 2026 VEXIS Creative. All rights reserved.
           </p>
 
           <div className="flex gap-6">
             <a
-              href="/privacy"
+              href={`${import.meta.env.BASE_URL}privacy`}
               className="text-sm text-vexis-text-secondary transition-colors hover:text-vexis-green"
             >
               Privacy Policy
-            </a>
-
-            <a
-              href="#"
-              className="text-sm text-vexis-text-secondary transition-colors hover:text-vexis-green"
-            >
-              Terms
             </a>
           </div>
         </div>

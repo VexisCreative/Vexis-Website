@@ -2,7 +2,8 @@ interface LogoProps {
   className?: string;
 }
 
-const LOGO_SOURCE = '/VEXISLogo.png';
+const BASE_URL = import.meta.env.BASE_URL;
+const LOGO_SOURCE = `${BASE_URL}ChatGPT_Image_Sep_10,_2026,_07_53_50_PM.png`;
 
 export function VexisLogo({ className = '' }: LogoProps) {
   return (

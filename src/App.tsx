@@ -11,7 +11,13 @@ import { Footer } from '@/sections/Footer';
 import { Privacy } from '@/sections/Privacy';
 
 function App() {
-  const isPrivacyPage = window.location.pathname === '/privacy';
+  const baseUrl = import.meta.env.BASE_URL;
+
+  const privacyPath = `${baseUrl}privacy`;
+
+  const isPrivacyPage =
+    window.location.pathname === privacyPath ||
+    window.location.pathname === `${privacyPath}/`;
 
   if (isPrivacyPage) {
     return <Privacy />;
