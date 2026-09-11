@@ -36,6 +36,11 @@ jobs:
       - name: Build website
         run: npm run build
 
+      - name: Create privacy route
+        run: |
+          mkdir -p dist/privacy
+          cp dist/index.html dist/privacy/index.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
