@@ -47,8 +47,8 @@ const PROJECTS: Project[] = [
     variant: 'medium',
     accent: 'green',
     images: [
-      `${BASE_URL}images/projects/life-sport-fitness-1.jpg`,
-      `${BASE_URL}images/projects/life-sport-fitness-2.jpg`,
+      `${BASE_URL}portfolio/life-sport-fitness-1.jpg`,
+      `${BASE_URL}portfolio/life-sport-fitness-2.jpg`,
     ],
   },
   {
@@ -58,7 +58,11 @@ const PROJECTS: Project[] = [
     variant: 'medium',
     accent: 'green',
     images: [
-      `${BASE_URL}portfolio/veridian-goods.jpg`,
+      `${BASE_URL}portfolio/veridian-goods-1.jpg`,
+      `${BASE_URL}portfolio/veridian-goods-2.jpg`,
+      `${BASE_URL}portfolio/veridian-goods-3.jpg`,
+      `${BASE_URL}portfolio/veridian-goods-4.jpg`,
+      `${BASE_URL}portfolio/veridian-goods-5.jpg`
     ],
   },
   {
@@ -68,8 +72,8 @@ const PROJECTS: Project[] = [
     variant: 'medium',
     accent: 'green',
     images: [
-      `${BASE_URL}images/projects/charlotte-emma-hair-1.jpg`,
-      `${BASE_URL}images/projects/charlotte-emma-hair-2.jpg`,
+      `${BASE_URL}portfolio/charlotte-emma-hair-1.jpg`,
+      `${BASE_URL}portfolio/charlotte-emma-hair-2.jpg`,
     ],
   },
 ];
